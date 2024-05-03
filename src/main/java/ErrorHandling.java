@@ -1,6 +1,4 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.EmptyStackException;
 import java.util.Optional;
 
 class ErrorHandling {
@@ -22,12 +20,10 @@ class ErrorHandling {
     }
 
     void handleErrorByThrowingAnyUncheckedException() {
-        // Delete this statement and write your own implementation.
         throw new RuntimeException();
     }
 
     void handleErrorByThrowingAnyUncheckedExceptionWithDetailMessage(String message) {
-        // Delete this statement and write your own implementation.
         throw new RuntimeException(message);
     }
 
@@ -38,7 +34,6 @@ class ErrorHandling {
 
     void handleErrorByThrowingCustomCheckedExceptionWithDetailMessage(String message) throws CustomCheckedException {
         throw new CustomCheckedException(message);
-
     }
 
     void handleErrorByThrowingCustomUncheckedException() {
@@ -50,15 +45,11 @@ class ErrorHandling {
     }
 
     Optional<Integer> handleErrorByReturningOptionalInstance(String integer) {
-
-
         try{
             int num=Integer.parseInt(integer);
             return Optional.of(num);
         }catch(Exception e){
             return Optional.empty();
         }
-
     }
-
 }

@@ -1,105 +1,142 @@
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import org.junit.jupiter.api.Disabled;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 public class ErrorHandlingTest {
-
-    private ErrorHandling errorHandling = new ErrorHandling();
+    private final ErrorHandling errorHandling = new ErrorHandling();
 
     @Test
     public void testThrowIllegalArgumentException() {
-        assertThatExceptionOfType(Exception.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingIllegalArgumentException());
-    }
+        Class<Exception> expectedException = Exception.class;
 
+        ThrowableAssert.ThrowingCallable actualException = errorHandling::handleErrorByThrowingIllegalArgumentException;
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException);
+    }
 
     @Test
     public void testThrowIllegalArgumentExceptionWithDetailMessage() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingIllegalArgumentExceptionWithDetailMessage(
-                        "This is the detail message."))
-                .withMessage("This is the detail message.");
-    }
+        Class<IllegalArgumentException> expectedException = IllegalArgumentException.class;
+        String exceptionMessage = "This is the detail message.";
 
+        ThrowableAssert.ThrowingCallable actualException = () -> errorHandling.handleErrorByThrowingIllegalArgumentExceptionWithDetailMessage(
+                exceptionMessage);
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException)
+                .withMessage(exceptionMessage);
+    }
 
     @Test
     public void testThrowAnyCheckedException() {
-        assertThatExceptionOfType(Exception.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingAnyCheckedException())
-                .isNotInstanceOf(RuntimeException.class);
-    }
+        Class<Exception> expectedException = Exception.class;
+        Class<RuntimeException> unExpectedException = RuntimeException.class;
 
+        ThrowableAssert.ThrowingCallable actualException = errorHandling::handleErrorByThrowingAnyCheckedException;
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException)
+                .isNotInstanceOf(unExpectedException);
+    }
 
     @Test
     public void testThrowAnyCheckedExceptionWithDetailMessage() {
-        assertThatExceptionOfType(Exception.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingAnyCheckedExceptionWithDetailMessage(
-                        "This is the detail message."))
-                .isNotInstanceOf(RuntimeException.class)
-                .withMessage("This is the detail message.");
-    }
+        String errorMessage = "This is the detail message.";
+        Class<Exception> expectedException = Exception.class;
+        Class<RuntimeException> unexpectedException = RuntimeException.class;
 
+        ThrowableAssert.ThrowingCallable actualException = () -> errorHandling.handleErrorByThrowingAnyCheckedExceptionWithDetailMessage(
+                errorMessage);
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException)
+                .isNotInstanceOf(unexpectedException)
+                .withMessage(errorMessage);
+    }
 
     @Test
     public void testThrowAnyUncheckedException() {
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingAnyUncheckedException());
-    }
+        Class<RuntimeException> expectedException = RuntimeException.class;
 
+        ThrowableAssert.ThrowingCallable actualException = errorHandling::handleErrorByThrowingAnyUncheckedException;
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException);
+    }
 
     @Test
     public void testThrowAnyUncheckedExceptionWithDetailMessage() {
-        assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingAnyUncheckedExceptionWithDetailMessage(
-                        "This is the detail message."))
-                .withMessage("This is the detail message.");
-    }
+        Class<RuntimeException> expectedException = RuntimeException.class;
+        String exceptionMessage = "This is the detail message.";
 
+        ThrowableAssert.ThrowingCallable actualException = () -> errorHandling.handleErrorByThrowingAnyUncheckedExceptionWithDetailMessage(
+                exceptionMessage);
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException)
+                .withMessage(exceptionMessage);
+    }
 
     @Test
     public void testThrowCustomCheckedException() {
-        assertThatExceptionOfType(CustomCheckedException.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingCustomCheckedException());
-    }
+        Class<CustomCheckedException> expectedException = CustomCheckedException.class;
 
+        ThrowableAssert.ThrowingCallable actualException = errorHandling::handleErrorByThrowingCustomCheckedException;
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException);
+    }
 
     @Test
     public void testThrowCustomCheckedExceptionWithDetailMessage() {
-        assertThatExceptionOfType(CustomCheckedException.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingCustomCheckedExceptionWithDetailMessage(
-                        "This is the detail message."))
-                .withMessage("This is the detail message.");
-    }
+        Class<CustomCheckedException> expectedException = CustomCheckedException.class;
+        String exceptionMessage = "This is the detail message.";
 
+        ThrowableAssert.ThrowingCallable actualException = () -> errorHandling.handleErrorByThrowingCustomCheckedExceptionWithDetailMessage(
+                exceptionMessage);
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException)
+                .withMessage(exceptionMessage);
+    }
 
     @Test
     public void testThrowCustomUncheckedException() {
-        assertThatExceptionOfType(CustomUncheckedException.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingCustomUncheckedException());
-    }
+        Class<CustomUncheckedException> expectedException = CustomUncheckedException.class;
 
+        ThrowableAssert.ThrowingCallable actualException = errorHandling::handleErrorByThrowingCustomUncheckedException;
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException);
+    }
 
     @Test
     public void testThrowCustomUncheckedExceptionWithDetailMessage() {
-        assertThatExceptionOfType(CustomUncheckedException.class)
-                .isThrownBy(() -> errorHandling.handleErrorByThrowingCustomUncheckedExceptionWithDetailMessage(
-                        "This is the detail message."))
-                .withMessage("This is the detail message.");
-    }
+        String exceptionMessage = "This is the detail message.";
+        Class<CustomUncheckedException> expectedException = CustomUncheckedException.class;
 
+        ThrowableAssert.ThrowingCallable actualException = () -> errorHandling.handleErrorByThrowingCustomUncheckedExceptionWithDetailMessage(
+                exceptionMessage);
+
+        assertThatExceptionOfType(expectedException)
+                .isThrownBy(actualException)
+                .withMessage(exceptionMessage);
+    }
 
     @Test
     public void testReturnOptionalInstance() {
-        Optional<Integer> successfulResult = errorHandling.handleErrorByReturningOptionalInstance("1");
-        assertThat(successfulResult).isPresent().hasValue(1);
+        String validInteger = "1";
+        Optional<Integer> successfulResult = errorHandling.handleErrorByReturningOptionalInstance(validInteger);
+        int expectedValue = 1;
+
+        assertThat(successfulResult).isPresent().hasValue(expectedValue);
 
         Optional<Integer> failureResult = errorHandling.handleErrorByReturningOptionalInstance("a");
         assertThat(failureResult).isNotPresent();
-
     }
-
 }
